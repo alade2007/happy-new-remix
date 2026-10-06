@@ -1,0 +1,1 @@
+- All site content (destinations, guides, authors, categories, search) lives in src/data/scout.ts — pages read only from it so real content/images can be swapped in one place.
