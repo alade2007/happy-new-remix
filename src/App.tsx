@@ -7,20 +7,18 @@ import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
 
 const Destinations = lazy(() => import("./pages/Destinations"));
-const ContinentPage = lazy(() => import("./pages/ContinentPage"));
-const CountryPage = lazy(() => import("./pages/CountryPage"));
-const ArticlePage = lazy(() => import("./pages/ArticlePage"));
-const RoutesPage = lazy(() => import("./pages/Routes"));
-const RouteDetailPage = lazy(() => import("./pages/RouteDetailPage"));
-const Shop = lazy(() => import("./pages/Shop"));
-const ProductDetailPage = lazy(() => import("./pages/ProductDetailPage"));
+const DestinationPage = lazy(() => import("./pages/DestinationPage"));
+const Guides = lazy(() => import("./pages/Guides"));
+const GuidePage = lazy(() => import("./pages/GuidePage"));
+const About = lazy(() => import("./pages/About"));
+const SearchPage = lazy(() => import("./pages/SearchPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
 const Loading = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+  <div className="flex min-h-screen items-center justify-center" role="status" aria-label="Loading">
+    <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
   </div>
 );
 
@@ -34,13 +32,13 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/destinations" element={<Destinations />} />
-            <Route path="/destinations/:continent" element={<ContinentPage />} />
-            <Route path="/destinations/:continent/:country" element={<CountryPage />} />
-            <Route path="/article/:articleId" element={<ArticlePage />} />
-            <Route path="/routes" element={<RoutesPage />} />
-            <Route path="/routes/:routeId" element={<RouteDetailPage />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/shop/:productId" element={<ProductDetailPage />} />
+            <Route path="/destinations/:slug" element={<DestinationPage />} />
+            <Route path="/guides" element={<Guides />} />
+            <Route path="/guides/:slug" element={<GuidePage />} />
+            <Route path="/travel-tips" element={<Guides key="tips" fixedCategory="travel-tips" />} />
+            <Route path="/food-culture" element={<Guides key="food" fixedCategory="food-culture" />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

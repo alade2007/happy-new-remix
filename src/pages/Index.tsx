@@ -1,303 +1,170 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import Layout from "@/components/layout/Layout";
-import ArticleCard from "@/components/ArticleCard";
-import NewsletterSignup from "@/components/NewsletterSignup";
-import { continents, featuredArticles } from "@/data/destinations";
+import SearchBox from "@/components/site/SearchBox";
+import { DestinationCard, GuideCard, CategoryCard } from "@/components/site/Cards";
+import { SectionHeader } from "@/components/site/Section";
+import Newsletter from "@/components/site/Newsletter";
+import { useSeo } from "@/hooks/useSeo";
+import { destinations, sortedGuides, guidesByTag, guidesByCategory, categories, images } from "@/data/scout";
 
-import heroGreece from "@/assets/hero-greece.jpg";
-import heroDesert from "@/assets/hero-desert.jpg";
-import heroCamping from "@/assets/hero-camping.jpg";
-import worldMap from "@/assets/world-map.jpg";
-import bloggers from "@/assets/bloggers.jpg";
-import travelBooks from "@/assets/travel-books.jpg";
+const featuredSlugs = ["lagos", "cape-town", "zanzibar", "dubai", "paris", "london", "tokyo", "new-york"];
 
-const heroSlides = [
-  { image: heroGreece, alt: "Santorini Greece sunset", subtitle: "Van road trips around the world..." },
-  { image: heroDesert, alt: "Desert road trip adventure", subtitle: "Discover untouched landscapes..." },
-  { image: heroCamping, alt: "Coastal camping van life", subtitle: "Adventure awaits everywhere..." },
-];
-
-const continentTags = ["Africa", "Asia", "Europe", "Central America", "South America", "Oceania", "North America"];
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const fade = { initial: { opacity: 0, y: 16 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: "-80px" }, transition: { duration: 0.5 } };
 
 const Index = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  useSeo({
+    title: "Travel Scout",
+    description: "Travel guides, hidden gems, local experiences, food, culture and practical tips to help you explore the world better.",
+  });
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
+  const featured = featuredSlugs.map((s) => destinations.find((d) => d.slug === s)!);
+  const trending = destinations.filter((d) => d.trending);
+  const lead = guidesByTag("featured")[0];
+  const latest = sortedGuides.filter((g) => g.slug !== lead.slug).slice(0, 6);
+  const hidden = guidesByTag("hidden-gem");
+  const tips = guidesByCategory("Travel Tips").concat(guidesByCategory("Solo Travel")).slice(0, 4);
+  const foodCulture = guidesByCategory("Food & Culture").slice(0, 3);
+  const inspiration = guidesByTag("inspiration").slice(0, 4);
 
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative h-[90vh] min-h-[600px] overflow-hidden">
-        {heroSlides.map((slide, i) => (
-          <div
-            key={i}
-            className={`absolute inset-0 transition-opacity duration-1000 ${i === currentSlide ? "opacity-100" : "opacity-0"}`}
-          >
-            <img src={slide.image} alt={slide.alt} className="w-full h-full object-cover" />
-          </div>
-        ))}
-        <div className="absolute inset-0 bg-gradient-to-b from-foreground/40 via-foreground/20 to-foreground/50" />
-
-        {/* Stamp badge */}
-        <div className="absolute top-8 right-8 md:top-12 md:right-16 stamp-badge text-primary-foreground border-primary-foreground/60 hidden md:flex">
-          <span>We Are<br/>Travellers<br/>Est. 2013</span>
-        </div>
-
-        <div className="relative h-full flex flex-col justify-end pb-20 px-6 md:px-16 max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <p className="text-primary-foreground/60 text-xs uppercase tracking-[0.3em] mb-3 font-medium">We Are Travellers</p>
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground tracking-tight mb-4 max-w-3xl italic leading-[1.1]">
-              Van road trips around the world, we've got you covered
-            </h1>
-            <p className="text-primary-foreground/70 text-xs uppercase tracking-[0.2em] mb-6">Where do you want to go?</p>
-            <div className="flex items-center max-w-sm bg-card/90 backdrop-blur rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-primary">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="flex-1 bg-transparent pl-4 pr-2 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none text-sm"
-              />
-              <button className="flex items-center justify-center w-10 h-10 bg-primary text-primary-foreground rounded-md m-0.5 hover:bg-primary/90 transition-colors shrink-0">
-                <Search className="w-4 h-4" />
-              </button>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Wavy bottom edge */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 30C240 60 480 0 720 30C960 60 1200 0 1440 30V60H0V30Z" fill="hsl(40, 33%, 96%)" />
-          </svg>
-        </div>
-      </section>
-
-      {/* Featured Articles */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
-        <div className="text-center mb-12">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2 font-medium">
-            All the tips you need for your next trip
-          </p>
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground italic">
-            Discover our latest travel tips
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredArticles.map((article, i) => (
-            <motion.div
-              key={article.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.5 }}
-            >
-              <ArticleCard article={article} />
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Where to Next - World Map */}
-      <section className="relative py-24 overflow-hidden">
-        <img src={worldMap} alt="World map" className="absolute inset-0 w-full h-full object-cover opacity-20" />
-        <div className="absolute inset-0 bg-earth-dark/90" />
-        <div className="relative max-w-7xl mx-auto px-4 md:px-8 text-center">
-          {/* Small stamp */}
-          <div className="stamp-badge text-primary-foreground/60 border-primary-foreground/30 mx-auto mb-6 w-16 h-16 text-[8px]">
-            <span>Where<br/>To Next</span>
-          </div>
-          <p className="text-primary-foreground/50 text-[10px] uppercase tracking-[0.3em] mb-2">Where to next?</p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-primary-foreground mb-10 italic">
-            Choose your adventure
-          </h2>
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {continentTags.map((tag) => (
-              <Link
-                key={tag}
-                to={`/destinations/${tag.toLowerCase().replace(/ /g, "-")}`}
-                className="bg-primary-foreground/10 border border-primary-foreground/20 text-primary-foreground/80 px-6 py-2 rounded-full text-xs font-medium tracking-wide hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
-              >
-                {tag}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Travel Promotion */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2 font-medium">Traveling solo together</p>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4 italic leading-snug">
-              Book your adventure trip this week and receive up to €250 discount
-            </h2>
-            <p className="text-muted-foreground leading-relaxed mb-6 text-sm">
-              Love adventure, making friends, but want to travel solo? Explorer Tours makes it easy to book solo trips and meet amazing people along the way. Whether you're heading to Iceland or Thailand, there's a group adventure waiting for you.
+      <section className="relative isolate overflow-hidden">
+        <img src={images.zanzibar} alt="A traditional dhow sailing off a Zanzibar beach at sunset" className="absolute inset-0 -z-10 h-full w-full object-cover" width={1600} height={1008} />
+        <div className="bg-overlay-gradient absolute inset-0 -z-10" />
+        <div className="container-site flex min-h-[88vh] flex-col justify-end pb-14 pt-32 md:min-h-[84vh] md:pb-20">
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-3xl text-primary-foreground">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-accent">Travel guides · Hidden gems · Local culture</p>
+            <h1 className="text-5xl font-semibold leading-[1.02] sm:text-6xl md:text-8xl">Discover places <em className="font-normal">worth</em> going.</h1>
+            <p className="mt-6 max-w-xl text-base text-primary-foreground/85 md:text-lg">
+              Travel guides, hidden gems, local experiences, food, culture and practical tips to help you explore the world better.
             </p>
-            <Link
-              to="/routes"
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-md font-semibold text-sm hover:opacity-90 transition"
-            >
-              Explore trips <ArrowRight className="w-4 h-4" />
-            </Link>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to="/destinations" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-accent-foreground transition hover:brightness-110">
+                Explore Destinations <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link to="/guides" className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/50 px-6 py-3.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-foreground hover:text-primary">
+                Read Travel Guides
+              </Link>
+            </div>
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="rounded-lg overflow-hidden shadow-md"
-          >
-            <img src={heroDesert} alt="Adventure trip promotion" className="w-full h-80 object-cover" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }} className="relative z-10 mt-10 max-w-xl">
+            <SearchBox variant="hero" />
           </motion.div>
         </div>
       </section>
 
-      {/* About / Meet the Team */}
-      <section className="bg-earth-cream">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1 relative">
-              <motion.img
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                src={bloggers}
-                alt="The We Are Travellers team"
-                className="rounded-lg shadow-md w-full h-96 object-cover"
-              />
-              {/* Team member badges */}
-              <div className="absolute -top-4 -right-4 bg-card rounded-full w-20 h-20 shadow-lg flex flex-col items-center justify-center text-center border-2 border-border">
-                <span className="text-[9px] font-medium text-muted-foreground">Travel Blogger</span>
-                <span className="text-xs font-bold text-foreground font-display">Michael</span>
-              </div>
-              <div className="absolute -bottom-4 -left-4 bg-card rounded-full w-20 h-20 shadow-lg flex flex-col items-center justify-center text-center border-2 border-border">
-                <span className="text-[9px] font-medium text-muted-foreground">Founder</span>
-                <span className="text-xs font-bold text-foreground font-display">Sarah</span>
-              </div>
-            </div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="order-1 md:order-2"
-            >
-              <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2 font-medium">Meet the Team</p>
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4 italic">
-                We are We Are Travellers
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-4 text-sm">
-                After a world journey in an old Land Cruiser through South America and exploring remote regions of Europe, we decided to share our passion for travel with fellow adventurers. Since 2013, we've been writing about our discoveries.
-              </p>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm">
-                Our team of travel bloggers now spans the globe — from desert road trips to Arctic adventures, we've got you covered.
-              </p>
-              <Link
-                to="/destinations"
-                className="inline-flex items-center gap-2 border border-primary text-primary px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-primary hover:text-primary-foreground transition-all"
-              >
-                Read more about us <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+      {/* Featured destinations */}
+      <section className="container-site py-16 md:py-24" aria-labelledby="featured-dest">
+        <SectionHeader id="featured-dest" eyebrow="Featured destinations" title="Where to go next" link={{ to: "/destinations", label: "All destinations" }} />
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {featured.map((d, i) => (
+            <motion.div key={d.slug} {...fade} transition={{ duration: 0.5, delay: (i % 4) * 0.06 }}>
+              <DestinationCard d={d} />
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Travel Books */}
-      <section className="bg-muted">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2 font-medium">Our Books</p>
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4 italic">
-                Want the very best travel tips?
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm">
-                We've distilled years of travel experience into comprehensive guidebooks. Packed with insider tips, hidden gems, and practical advice for your next adventure.
-              </p>
-              <Link
-                to="/shop"
-                className="inline-flex items-center gap-2 border border-primary text-primary px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-primary hover:text-primary-foreground transition-all"
-              >
-                Browse our guides <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-            <div className="rounded-lg overflow-hidden shadow-md">
-              <img src={travelBooks} alt="Travel guide books" className="w-full h-80 object-cover" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Popular Destinations by Continent */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div className="text-center mb-12">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2 font-medium">Have you been here before?</p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-12">
-          {continents.slice(0, 4).map((continent) => (
-            <div key={continent.slug} className="bg-card rounded-lg p-6 border border-border">
-              <h3 className="font-display text-2xl font-bold text-foreground mb-1 italic">{continent.name}</h3>
-              <ul className="space-y-3 mt-4">
-                {continent.countries.slice(0, 3).map((country) => (
-                  <li key={country.slug} className="flex items-start gap-3">
-                    <span className="text-primary font-display font-bold text-sm uppercase tracking-wide mt-0.5 min-w-[80px]">{country.name}</span>
-                    <span className="text-xs text-muted-foreground leading-relaxed">
-                      {country.articles[0]?.title}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to={`/destinations/${continent.slug}`}
-                className="inline-flex items-center gap-1 text-primary font-semibold text-xs mt-5 border border-primary rounded-full px-4 py-1.5 hover:bg-primary hover:text-primary-foreground transition-all"
-              >
-                See all in {continent.name} <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
           ))}
         </div>
       </section>
 
-      {/* When to Travel */}
-      <section className="border-t border-border">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
-          <div className="text-center mb-10">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2 font-medium">When do you want to travel?</p>
+      {/* Featured guide */}
+      <section className="container-site pb-16 md:pb-24" aria-label="Featured guide">
+        <motion.div {...fade}><GuideCard g={lead} variant="feature" /></motion.div>
+      </section>
+
+      {/* Latest + Trending */}
+      <section className="border-y border-border bg-card">
+        <div className="container-site grid gap-14 py-16 md:py-24 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <SectionHeader eyebrow="Fresh from the field" title="Latest travel guides" link={{ to: "/guides", label: "All guides" }} />
+            <div className="grid gap-10 sm:grid-cols-2">
+              {latest.slice(0, 4).map((g) => <GuideCard key={g.slug} g={g} />)}
+            </div>
           </div>
-          <div className="flex flex-wrap justify-center gap-2">
-            {months.map((month) => (
-              <button
-                key={month}
-                className="px-5 py-2 rounded-full border border-border text-xs font-medium text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all tracking-wide"
-              >
-                {month}
-              </button>
-            ))}
+          <aside className="lg:col-span-4" aria-labelledby="trending">
+            <p className="eyebrow mb-2">Right now</p>
+            <h2 id="trending" className="mb-6 text-3xl font-semibold">Trending destinations</h2>
+            <ol className="space-y-4">
+              {trending.map((d, i) => (
+                <li key={d.slug}>
+                  <Link to={`/destinations/${d.slug}`} className="group flex items-center gap-4">
+                    <span className="w-6 font-display text-2xl text-accent">{i + 1}</span>
+                    <img src={d.image} alt="" loading="lazy" className="h-16 w-16 rounded object-cover" />
+                    <span>
+                      <span className="block font-display text-xl font-semibold transition group-hover:text-accent">{d.name}</span>
+                      <span className="text-xs text-muted-foreground">{d.country}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </aside>
+        </div>
+      </section>
+
+      {/* Hidden gems */}
+      <section className="container-site py-16 md:py-24" aria-labelledby="hidden">
+        <SectionHeader id="hidden" eyebrow="Off the beaten path" title="Hidden gems" intro="The places our writers return to when the crowds go elsewhere." />
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {hidden.slice(0, 3).map((g) => <GuideCard key={g.slug} g={g} />)}
+        </div>
+      </section>
+
+      {/* Travel tips */}
+      <section className="bg-primary text-primary-foreground" aria-labelledby="tips">
+        <div className="container-site grid gap-12 py-16 md:py-24 lg:grid-cols-12">
+          <div className="lg:col-span-4">
+            <p className="eyebrow mb-2">Travel smarter</p>
+            <h2 id="tips" className="text-3xl font-semibold md:text-[42px] md:leading-[1.1]">Travel tips that actually help</h2>
+            <p className="mt-4 text-primary-foreground/70">Packing, money, safety and booking advice from writers who are on the road most of the year.</p>
+            <Link to="/travel-tips" className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground hover:brightness-110">
+              All travel tips <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="grid gap-8 sm:grid-cols-2 lg:col-span-8 [&_h3]:text-primary-foreground [&_p]:text-primary-foreground/60">
+            {tips.map((g) => <GuideCard key={g.slug} g={g} variant="compact" />)}
           </div>
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 pb-16 md:pb-24">
-        <NewsletterSignup />
+      {/* Food & culture */}
+      <section className="container-site py-16 md:py-24" aria-labelledby="food">
+        <SectionHeader id="food" eyebrow="Eat, listen, learn" title="Food & culture" link={{ to: "/food-culture", label: "More food & culture" }} />
+        <div className="grid gap-8 lg:grid-cols-2">
+          <Link to={`/guides/${foodCulture[0].slug}`} className="group relative block overflow-hidden rounded-lg">
+            <img src={images.food} alt="A cook serving jollof rice beside a suya grill at a Lagos market" loading="lazy" className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-105 lg:h-full" />
+            <div className="bg-overlay-gradient absolute inset-0" />
+            <div className="absolute bottom-0 p-6 text-primary-foreground md:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">{foodCulture[0].category}</p>
+              <h3 className="mt-2 text-3xl font-semibold">{foodCulture[0].title}</h3>
+            </div>
+          </Link>
+          <div className="flex flex-col justify-center gap-8">
+            {foodCulture.slice(1).map((g) => <GuideCard key={g.slug} g={g} variant="horizontal" />)}
+          </div>
+        </div>
       </section>
+
+      {/* Categories */}
+      <section className="container-site pb-16 md:pb-24" aria-labelledby="cats">
+        <SectionHeader id="cats" eyebrow="Browse by interest" title="Find your kind of trip" />
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {categories.map((c) => <CategoryCard key={c.slug} {...c} />)}
+        </div>
+      </section>
+
+      {/* Inspiration */}
+      <section className="border-t border-border bg-card" aria-labelledby="insp">
+        <div className="container-site py-16 md:py-24">
+          <SectionHeader id="insp" eyebrow="Daydream" title="Travel inspiration" />
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {inspiration.map((g) => <GuideCard key={g.slug} g={g} />)}
+          </div>
+        </div>
+      </section>
+
+      <Newsletter image={images.aurora} />
     </Layout>
   );
 };
