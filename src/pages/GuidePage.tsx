@@ -122,7 +122,7 @@ const GuidePage = () => {
           </aside>
 
           <div className="lg:col-span-7">
-            <div className="space-y-6 text-[17px] leading-[1.8] text-foreground/85 md:text-lg [&>p:first-child]:font-display [&>p:first-child]:text-2xl [&>p:first-child]:leading-relaxed [&>p:first-child]:text-foreground">
+            <div className="space-y-6 text-[17px] leading-[1.8] text-foreground/85 md:text-lg [&>p:first-child]:font-display [&>p:first-child]:text-xl md:[&>p:first-child]:text-2xl [&>p:first-child]:leading-relaxed [&>p:first-child]:text-foreground">
               {g.body.map(renderBlock)}
             </div>
 
