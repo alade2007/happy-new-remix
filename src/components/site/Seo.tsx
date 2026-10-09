@@ -21,6 +21,7 @@ const Seo = ({ title, description, type = "website", image, jsonLd, noindex }: S
   const url = `${SITE_URL}${pathname}`;
   return (
     <Helmet>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" />
       <title>{full}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />

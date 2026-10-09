@@ -15,6 +15,7 @@ const GuidePage = lazy(() => import("./pages/GuidePage"));
 const About = lazy(() => import("./pages/About"));
 const SearchPage = lazy(() => import("./pages/SearchPage"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Planner = lazy(() => import("./pages/Planner"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/food-culture" element={<Guides key="food" fixedCategory="food-culture" />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/planner" element={<Planner />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -5,11 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import Logo from "./Logo";
 import SearchBox from "./SearchBox";
 import { cn } from "@/lib/utils";
+import TravelIcon from "./TravelIcon";
 
 export const navItems = [
   { label: "Home", to: "/" },
   { label: "Destinations", to: "/destinations" },
   { label: "Travel Guides", to: "/guides" },
+  { label: "Trip Planner", to: "/planner" },
   { label: "Travel Tips", to: "/travel-tips" },
   { label: "Food & Culture", to: "/food-culture" },
   { label: "About", to: "/about" },
@@ -56,7 +58,7 @@ const Navbar = () => {
     >
       <div className="container-site flex h-16 items-center justify-between gap-6">
         <Logo />
-        <nav aria-label="Main" className="hidden lg:flex items-center gap-7">
+        <nav aria-label="Main" className="hidden xl:flex items-center gap-5">
           {navItems.map((i) => (
             <NavLink key={i.to} to={i.to} end={i.to === "/"} className={linkClass}>
               {i.label}
@@ -80,7 +82,7 @@ const Navbar = () => {
           </button>
           <button
             onClick={() => setOpen(true)}
-            className="lg:hidden rounded-full p-2.5 text-foreground/80 hover:bg-muted"
+            className="xl:hidden rounded-full p-2.5 text-foreground/80 hover:bg-muted"
             aria-label="Open menu"
           >
             <Menu className="h-5 w-5" />
@@ -108,7 +110,7 @@ const Navbar = () => {
         {open && (
           <>
             <motion.div
-              className="fixed inset-0 z-50 bg-primary/40 lg:hidden"
+              className="fixed inset-0 z-50 bg-primary/40 xl:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -119,7 +121,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.28, ease: "easeOut" }}
-              className="fixed inset-y-0 right-0 z-50 flex w-[86vw] max-w-sm flex-col bg-background p-6 shadow-2xl lg:hidden"
+              className="fixed inset-y-0 right-0 z-50 flex w-[86vw] max-w-sm flex-col overflow-y-auto bg-background p-6 shadow-2xl xl:hidden"
               aria-label="Mobile menu"
             >
               <div className="flex items-center justify-between">
@@ -141,7 +143,7 @@ const Navbar = () => {
                       cn("border-b border-border py-3.5 font-display text-2xl transition", isActive ? "text-accent" : "text-foreground hover:text-accent")
                     }
                   >
-                    {i.label}
+                    <span className="group flex items-center gap-2"><TravelIcon kind={i.to === "/food-culture" ? "dining" : i.to === "/planner" ? "route" : "tour"} />{i.label}</span>
                   </NavLink>
                 ))}
               </nav>
