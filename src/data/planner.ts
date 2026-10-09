@@ -22,7 +22,7 @@ export function createItinerary(destination: Destination, days = 3): ItineraryDa
 
 export function interpretPlannerRequest(text: string, current: Destination, destinations: Destination[], currentDays: number) {
   const lower = text.toLowerCase();
-  const destination = destinations.find(d => lower.includes(d.name.toLowerCase()) || lower.includes(d.slug.replaceAll("-", " "))) ?? current;
+  const destination = destinations.find(d => lower.includes(d.name.toLowerCase()) || lower.includes(d.slug.replace(/-/g, " "))) ?? current;
   const match = lower.match(/\b([1-7])\s*[- ]?days?\b/);
   const days = match ? Number(match[1]) : currentDays;
   const supported = Boolean(match || destination.slug !== current.slug || /plan|itinerary|reset|explore|trip/.test(lower));

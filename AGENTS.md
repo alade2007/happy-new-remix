@@ -6,4 +6,4 @@
 - The planner is a session-only preview using AI Elements chat primitives and deterministic transformations of the existing destination data; never imply live AI, saved trips or billing until those services are connected.
 - Planner timeline and route preview share one itinerary and selection state so pin clicks and chat-driven destination changes cannot diverge.
 - External availability links resolve through src/lib/affiliateLinks.ts with HTTPS-only public partner templates and working non-affiliate fallbacks, so tracking configuration does not require editing views.
-- TypeScript's standard library includes ES2021 APIs used by the installed AI Elements sources; the emitted target remains ES2020.
+- Keep installed chat primitives compatible with the existing ES2020 target by using globally matched replace or split/join rather than newer string APIs.
