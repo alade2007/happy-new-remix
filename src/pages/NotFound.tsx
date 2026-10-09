@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
-import { useSeo } from "@/hooks/useSeo";
 
 const NotFound = () => {
-  useSeo({ title: "Page not found", description: "The page you were looking for doesn't exist." });
+  const seo = ({ title: "Page not found", description: "The page you were looking for doesn't exist." });
   return (
-    <Layout>
+    <Layout seo={seo}>
       <section className="container-site flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">
         <p className="eyebrow mb-3">404</p>
         <h1 className="text-4xl font-semibold md:text-6xl">This trail goes nowhere.</h1>

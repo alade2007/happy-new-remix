@@ -6,10 +6,9 @@ import { DestinationTile } from "@/components/site/Cards";
 import { PageHero, Chip, EmptyState } from "@/components/site/Section";
 import Newsletter from "@/components/site/Newsletter";
 import { destinations, regions, images } from "@/data/scout";
-import { useSeo } from "@/hooks/useSeo";
 
 const Destinations = () => {
-  useSeo({ title: "Explore Destinations", description: "Browse Travel Scout destination guides across Africa, Europe, Asia, the Americas, the Middle East and Oceania." });
+  const seo = ({ title: "Explore Destinations", description: "Browse Travel Scout destination guides across Africa, Europe, Asia, the Americas, the Middle East and Oceania." });
   const [params, setParams] = useSearchParams();
   const region = params.get("region") ?? "All";
   const q = params.get("q") ?? "";
@@ -29,7 +28,7 @@ const Destinations = () => {
   }, [region, q]);
 
   return (
-    <Layout>
+    <Layout seo={seo}>
       <PageHero
         eyebrow="Destinations"
         title="Explore Destinations"

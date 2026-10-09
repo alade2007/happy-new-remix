@@ -5,8 +5,8 @@ import { PageHero, RelatedGuides } from "@/components/site/Section";
 import { DestinationCard } from "@/components/site/Cards";
 import Newsletter from "@/components/site/Newsletter";
 import NotFound from "./NotFound";
+import { coordsFor } from "@/data/travelStore";
 import { getDestination, guidesForDestination, destinations, sortedGuides } from "@/data/scout";
-import { useSeo } from "@/hooks/useSeo";
 
 const Block = ({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) => (
   <section className="border-t border-border py-8">
@@ -20,9 +20,11 @@ const Block = ({ icon: Icon, title, children }: { icon: React.ElementType; title
 const DestinationPage = () => {
   const { slug = "" } = useParams();
   const d = getDestination(slug);
-  useSeo({
+  const seo = ({
     title: d ? `${d.name}, ${d.country} Travel Guide` : "Destination not found",
     description: d ? `${d.tagline} Best time to visit, budget, things to do, where to eat and stay in ${d.name}.` : "This destination could not be found.",
+    image: d?.image,
+    jsonLd: d ? { "@context": "https://schema.org", "@type": "TouristDestination", name: d.name, description: d.tagline, image: d.image, ...(coordsFor(d.slug) && { geo: { "@type": "GeoCoordinates", latitude: coordsFor(d.slug)!.lat, longitude: coordsFor(d.slug)!.lng } }) } : undefined,
   });
   if (!d) return <NotFound />;
 
@@ -37,7 +39,7 @@ const DestinationPage = () => {
   ];
 
   return (
-    <Layout>
+    <Layout seo={seo}>
       <PageHero eyebrow={`${d.region} · ${d.country}`} title={`${d.name}, ${d.country}`} intro={d.tagline} image={d.image} imageAlt={`${d.name}, ${d.country}`} />
 
       <nav aria-label="Breadcrumb" className="container-site pt-6 text-xs text-muted-foreground">
