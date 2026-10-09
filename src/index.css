@@ -44,6 +44,8 @@
     --travel-map: 150 18% 94%;
     --travel-water: 199 43% 83%;
     --travel-road: 0 0% 100%;
+    --tier-budget: 160 60% 34%;
+    --tier-premium: 38 82% 42%;
     --shadow-icon: 0 3px 8px hsl(var(--travel-brand) / 0.16);
     --shadow-card: 0 18px 40px -24px hsl(220 40% 10% / 0.35);
   }
@@ -108,6 +110,12 @@
   }
   .route-line { stroke: hsl(var(--travel-brand)); }
   .route-pin { box-shadow: var(--shadow-icon); }
+  .tier-budget { --tier-outline: var(--tier-budget); }
+  .tier-balanced { --tier-outline: var(--travel-brand); }
+  .tier-premium { --tier-outline: var(--tier-premium); }
+  .tier-stop { border-left: 3px solid hsl(var(--tier-outline) / .5); }
+  .tier-price { color: hsl(var(--tier-outline)); }
+  .tier-stop:hover .travel-icon, .tier-stop:focus-within .travel-icon { transform: scale(1.1); color: hsl(var(--travel-brand)); background: hsl(var(--travel-glow)); box-shadow: var(--shadow-icon); }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

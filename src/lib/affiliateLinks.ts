@@ -1,4 +1,9 @@
-import type { WaypointCategory } from "@/data/waypoints";
+import type { Waypoint, WaypointCategory } from "@/data/waypoints";
+
+export function waypointBookingUrl(waypoint: Waypoint, city: string): string {
+  const configured = waypoint.affiliate?.url ?? waypoint.affiliateUrl;
+  return availabilityUrl(waypoint.category, waypoint.title, city, configured === "#" ? undefined : configured);
+}
 
 export function availabilityUrl(category: WaypointCategory, title: string, city: string, configured?: string): string {
   const query = encodeURIComponent(`${title} ${city}`);

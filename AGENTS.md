@@ -7,3 +7,5 @@
 - Planner timeline and route preview share one itinerary and selection state so pin clicks and chat-driven destination changes cannot diverge.
 - External availability links resolve through src/lib/affiliateLinks.ts with HTTPS-only public partner templates and working non-affiliate fallbacks, so tracking configuration does not require editing views.
 - Keep installed chat primitives compatible with the existing ES2020 target by using globally matched replace or split/join rather than newer string APIs.
+- Waypoint tier estimates, optional landmark imagery/local tips, and structured affiliate metadata belong to the waypoint data layer; timeline and drawer use shared price and HTTPS booking resolvers to avoid divergent content or unsafe links.
+- Contextual planner drawers derive their stop from the existing shared selection; spending tier is session-only canvas state so route pins, timeline, and detail estimates remain synchronized without implying saved preferences.
