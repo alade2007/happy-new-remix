@@ -79,3 +79,12 @@
     @apply mx-auto w-full max-w-7xl px-5 md:px-8;
   }
 }
+
+@layer utilities {
+  .map-grid {
+    background-image:
+      linear-gradient(hsl(var(--border)) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}

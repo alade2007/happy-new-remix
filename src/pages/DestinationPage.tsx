@@ -5,6 +5,8 @@ import { PageHero, RelatedGuides } from "@/components/site/Section";
 import { DestinationCard } from "@/components/site/Cards";
 import Newsletter from "@/components/site/Newsletter";
 import NotFound from "./NotFound";
+import MapExplorer from "@/components/site/MapExplorer";
+import { waypointsFor } from "@/data/waypoints";
 import { coordsFor } from "@/data/travelStore";
 import { getDestination, guidesForDestination, destinations, sortedGuides } from "@/data/scout";
 
@@ -119,6 +121,8 @@ const DestinationPage = () => {
           </div>
         </aside>
       </div>
+
+      {waypointsFor(d.slug).length > 0 && <MapExplorer city={d.name} waypoints={waypointsFor(d.slug)} />}
 
       <div id="latest-guides" className="scroll-mt-20">
         <RelatedGuides title={own.length ? `Latest ${d.name} guides` : `More from ${d.region}`} guides={related} link={{ to: "/guides", label: "All guides" }} className="border-t border-border" />
