@@ -39,7 +39,7 @@ const QuoteForm = () => {
   });
   const onSubmit = async (v: QuoteInput) => {
     const r = await submitQuote(v);
-    if (r.ok) { done(r.demo, "Quote request sent — we'll reply within 2 working days."); reset(); } else toast.error(r.error);
+    if (r.ok) { done(r.demo, "Quote request sent — we'll reply within 2 working days."); reset(); } else if (r.ok === false) toast.error(r.error);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-5 sm:grid-cols-2">
@@ -71,7 +71,7 @@ const ContactForm = () => {
   });
   const onSubmit = async (v: ContactInput) => {
     const r = await submitContact(v);
-    if (r.ok) { done(r.demo, "Message sent — thanks for getting in touch!"); reset(); } else toast.error(r.error);
+    if (r.ok) { done(r.demo, "Message sent — thanks for getting in touch!"); reset(); } else if (r.ok === false) toast.error(r.error);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-5 sm:grid-cols-2">
