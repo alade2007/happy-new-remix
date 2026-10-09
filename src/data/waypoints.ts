@@ -2,6 +2,14 @@
 import { images } from "./scout";
 
 export type WaypointCategory = "stay" | "tour" | "transit";
+export type SpendingTier = "budget" | "balanced" | "premium";
+export interface WaypointTierDetails {
+  amount: number;
+  currency: "USD";
+  unit: "night" | "person" | "ride";
+  description: string;
+}
+export interface WaypointAffiliate { url: string; provider?: string }
 
 export interface Waypoint {
   id: string;
@@ -16,6 +24,33 @@ export interface Waypoint {
   pin: { x: number; y: number };
   directionsUrl: string;
   affiliateUrl: string;
+  affiliate?: WaypointAffiliate;
+  localTip?: string;
+  /** Only set for an actual photo of this landmark; image remains legacy destination imagery. */
+  landmarkImage?: string;
+  tiers?: Record<SpendingTier, WaypointTierDetails>;
+}
+
+// Preview estimates only, not venue quotes. Replace tiers on each record with partner data.
+const samplePrices: Record<WaypointCategory, Record<SpendingTier, number>> = {
+  stay: { budget: 45, balanced: 120, premium: 280 },
+  tour: { budget: 10, balanced: 35, premium: 95 },
+  transit: { budget: 3, balanced: 15, premium: 55 },
+};
+const tierDescriptions: Record<WaypointCategory, Record<SpendingTier, string>> = {
+  stay: { budget: "Explore simple stays nearby with essential comforts.", balanced: "Explore comfortable stays with convenient local access.", premium: "Explore upscale stays with elevated comfort and service." },
+  tour: { budget: "Explore independently with a self-guided visit.", balanced: "Explore with a small-group experience or standard admission.", premium: "Explore private-guide and tailored experience options." },
+  transit: { budget: "Compare public transport and shared local routes.", balanced: "Compare convenient taxis and standard transfers.", premium: "Compare private transfers and chauffeur options." },
+};
+export function waypointTierDetails(waypoint: Waypoint, tier: SpendingTier): WaypointTierDetails {
+  return waypoint.tiers?.[tier] ?? {
+    amount: samplePrices[waypoint.category][tier], currency: "USD",
+    unit: waypoint.category === "stay" ? "night" : waypoint.category === "tour" ? "person" : "ride",
+    description: tierDescriptions[waypoint.category][tier],
+  };
+}
+export function formatWaypointPrice(details: WaypointTierDetails): string {
+  return `${new Intl.NumberFormat("en-US", { style: "currency", currency: details.currency, maximumFractionDigits: 0 }).format(details.amount)} / ${details.unit}`;
 }
 
 const dir = (lat: number, lng: number) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
