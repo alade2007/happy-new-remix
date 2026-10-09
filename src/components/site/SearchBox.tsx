@@ -41,7 +41,7 @@ const SearchBox = ({ autoFocus, compact, placeholder = "Where do you want to go?
           placeholder={placeholder}
           autoFocus={autoFocus}
           autoComplete="off"
-          className={cn("min-w-0 flex-1 bg-transparent px-3 text-foreground placeholder:text-muted-foreground focus:outline-none", hero ? "py-4 text-base" : "py-3 text-sm")}
+          className={cn("min-w-0 flex-1 bg-transparent px-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0", hero ? "py-4 text-base" : "py-3 text-sm")}
         />
         <button type="submit" className={cn("mr-1.5 inline-flex items-center gap-1.5 rounded-full bg-accent font-semibold text-accent-foreground transition hover:bg-primary", hero ? "px-5 py-2.5 text-sm" : "px-4 py-2 text-xs")}>
           Search
