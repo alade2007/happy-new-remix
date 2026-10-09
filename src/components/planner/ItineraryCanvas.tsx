@@ -14,8 +14,8 @@ export default function ItineraryCanvas({ days, city, active, setActive, view, s
     <div className="sticky top-16 z-20 flex flex-wrap items-center justify-between gap-3 border-b border-border bg-background/95 px-5 py-4 backdrop-blur">
       <span className="font-sans text-sm font-semibold">Your trip, at a glance</span>
       <div role="tablist" aria-label="Canvas view" className="flex rounded-md bg-muted p-1">
-        <Button role="tab" aria-selected={view === "itinerary"} variant="ghost" size="sm" className={cn("text-xs", view === "itinerary" && "bg-card shadow-sm")} onClick={() => setView("itinerary")}><List />Itinerary View</Button>
-        <Button role="tab" aria-selected={view === "map"} variant="ghost" size="sm" className={cn("text-xs", view === "map" && "bg-card shadow-sm")} onClick={() => setView("map")}><Map />Interactive Route Map</Button>
+        <Button role="tab" aria-selected={view === "itinerary"} variant="ghost" size="sm" className={cn("text-xs hover:bg-travel-glow hover:text-travel-brand", view === "itinerary" && "bg-card shadow-sm")} onClick={() => setView("itinerary")}><List />Itinerary View</Button>
+        <Button role="tab" aria-selected={view === "map"} variant="ghost" size="sm" className={cn("text-xs hover:bg-travel-glow hover:text-travel-brand", view === "map" && "bg-card shadow-sm")} onClick={() => setView("map")}><Map />Interactive Route Map</Button>
       </div>
     </div>
     <div className="mx-auto max-w-4xl space-y-6 p-5 md:p-7">
