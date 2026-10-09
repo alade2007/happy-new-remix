@@ -6,7 +6,6 @@ import SearchBox from "@/components/site/SearchBox";
 import { DestinationCard, GuideCard, CategoryCard } from "@/components/site/Cards";
 import { SectionHeader } from "@/components/site/Section";
 import Newsletter from "@/components/site/Newsletter";
-import { useSeo } from "@/hooks/useSeo";
 import { destinations, sortedGuides, guidesByTag, guidesByCategory, categories, images } from "@/data/scout";
 
 const featuredSlugs = ["lagos", "cape-town", "zanzibar", "dubai", "paris", "london", "tokyo", "new-york"];
@@ -14,7 +13,7 @@ const featuredSlugs = ["lagos", "cape-town", "zanzibar", "dubai", "paris", "lond
 const fade = { initial: { opacity: 0, y: 16 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: "-80px" }, transition: { duration: 0.5 } };
 
 const Index = () => {
-  useSeo({
+  const seo = ({
     title: "Travel Scout",
     description: "Travel guides, hidden gems, local experiences, food, culture and practical tips to help you explore the world better.",
   });
@@ -29,7 +28,7 @@ const Index = () => {
   const inspiration = guidesByTag("inspiration").slice(0, 4);
 
   return (
-    <Layout>
+    <Layout seo={seo}>
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
         <img src={images.zanzibar} alt="A traditional dhow sailing off a Zanzibar beach at sunset" className="absolute inset-0 -z-10 h-full w-full object-cover" width={1600} height={1008} />

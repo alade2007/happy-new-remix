@@ -6,7 +6,6 @@ import { RelatedGuides } from "@/components/site/Section";
 import Newsletter from "@/components/site/Newsletter";
 import NotFound from "./NotFound";
 import { getGuide, getAuthor, formatDate, sortedGuides, getDestination, categorySlug, type Block } from "@/data/scout";
-import { useSeo } from "@/hooks/useSeo";
 import { cn } from "@/lib/utils";
 
 const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -49,7 +48,7 @@ const GuidePage = () => {
   const [copied, setCopied] = useState(false);
   const [active, setActive] = useState("");
 
-  useSeo({ title: g?.title ?? "Guide not found", description: g?.excerpt ?? "This guide could not be found.", type: "article" });
+  const seo = { title: g?.title ?? "Guide not found", description: g?.excerpt ?? "This guide could not be found.", type: "article", image: g?.image, jsonLd: g ? { "@context": "https://schema.org", "@type": "Article", headline: g.title, description: g.excerpt, datePublished: g.date, image: g.image } : undefined };
 
   const toc = useMemo(() => (g ? g.body.filter((b): b is Extract<Block, { type: "h2" }> => b.type === "h2").map((b) => ({ id: slugify(b.text), text: b.text })) : []), [g]);
 
@@ -79,7 +78,7 @@ const GuidePage = () => {
   const shareBtn = "flex h-9 w-9 items-center justify-center rounded-full border border-border transition hover:border-accent hover:bg-accent hover:text-accent-foreground";
 
   return (
-    <Layout>
+    <Layout seo={seo}>
       <article>
         <header className="container-site max-w-4xl pt-12 text-center md:pt-16">
           <Link to={`/guides?category=${categorySlug(g.category)}`} className="eyebrow hover:underline">{g.category}</Link>

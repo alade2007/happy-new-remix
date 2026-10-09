@@ -23,7 +23,7 @@ const links = [
   { label: "Travel Tips", to: "/travel-tips" },
   { label: "Food & Culture", to: "/food-culture" },
   { label: "About", to: "/about" },
-  { label: "Contact", to: "/about#contact" },
+  { label: "Contact", to: "/contact" },
 ];
 
 const regionsLinks = ["Africa", "Europe", "Asia", "Middle East", "North America", "Oceania"];

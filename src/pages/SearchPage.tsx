@@ -4,7 +4,6 @@ import Layout from "@/components/layout/Layout";
 import SearchBox from "@/components/site/SearchBox";
 import { Chip, EmptyState } from "@/components/site/Section";
 import { searchAll, type SearchResult } from "@/data/scout";
-import { useSeo } from "@/hooks/useSeo";
 
 const types: ("All" | SearchResult["type"])[] = ["All", "Destination", "Guide", "Category"];
 
@@ -12,13 +11,13 @@ const SearchPage = () => {
   const [params] = useSearchParams();
   const q = params.get("q") ?? "";
   const [type, setType] = useState<(typeof types)[number]>("All");
-  useSeo({ title: q ? `Search: ${q}` : "Search", description: "Search Travel Scout destinations, travel guides and categories." });
+  const seo = ({ title: q ? `Search: ${q}` : "Search", description: "Search Travel Scout destinations, travel guides and categories." });
 
   const all = useMemo(() => searchAll(q), [q]);
   const results = type === "All" ? all : all.filter((r) => r.type === type);
 
   return (
-    <Layout>
+    <Layout seo={seo}>
       <section className="border-b border-border">
         <div className="container-site max-w-3xl py-14 md:py-20">
           <p className="eyebrow mb-3">Search</p>

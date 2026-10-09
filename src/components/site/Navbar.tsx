@@ -13,6 +13,7 @@ export const navItems = [
   { label: "Travel Tips", to: "/travel-tips" },
   { label: "Food & Culture", to: "/food-culture" },
   { label: "About", to: "/about" },
+  { label: "Contact", to: "/contact" },
 ];
 
 export const scrollToNewsletter = () =>

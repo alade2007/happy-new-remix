@@ -4,7 +4,6 @@ import Layout from "@/components/layout/Layout";
 import { PageHero } from "@/components/site/Section";
 import Newsletter from "@/components/site/Newsletter";
 import { authors, categories, images } from "@/data/scout";
-import { useSeo } from "@/hooks/useSeo";
 
 const pillars = [
   { title: "Reported on the ground", text: "Every destination guide is written or updated by someone who has recently been there. We don't rewrite press releases." },
@@ -14,9 +13,9 @@ const pillars = [
 ];
 
 const About = () => {
-  useSeo({ title: "About", description: "Travel Scout helps travellers discover destinations, experiences, food, culture and practical travel information. Meet the team." });
+  const seo = ({ title: "About", description: "Travel Scout helps travellers discover destinations, experiences, food, culture and practical travel information. Meet the team." });
   return (
-    <Layout>
+    <Layout seo={seo}>
       <PageHero eyebrow="About Travel Scout" title="Travel better. Explore deeper." intro="Travel Scout is an independent travel publication helping curious travellers discover destinations, experiences, food, culture and the practical information that turns a good trip into a great one." image={images.marrakech} imageAlt="A traveller walking through a lantern-lit souk in Marrakech" />
 
       <section className="container-site grid gap-10 py-16 md:grid-cols-12 md:py-24">

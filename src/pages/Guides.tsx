@@ -6,7 +6,6 @@ import { GuideCard } from "@/components/site/Cards";
 import { PageHero, Chip, EmptyState } from "@/components/site/Section";
 import Newsletter from "@/components/site/Newsletter";
 import { categories, sortedGuides, guidesByTag, getCategoryBySlug } from "@/data/scout";
-import { useSeo } from "@/hooks/useSeo";
 
 /** Blog listing. `fixedCategory` powers dedicated section pages like /travel-tips. */
 const Guides = ({ fixedCategory }: { fixedCategory?: string }) => {
@@ -15,7 +14,7 @@ const Guides = ({ fixedCategory }: { fixedCategory?: string }) => {
   const cat = getCategoryBySlug(catSlug);
   const q = params.get("q") ?? "";
 
-  useSeo({
+  const seo = ({
     title: cat && fixedCategory ? cat.name : cat ? `${cat.name} Guides` : "Travel Guides",
     description: cat ? `${cat.description} Read the latest ${cat.name.toLowerCase()} stories from Travel Scout.` : "Destination guides, travel tips, food and culture stories from the Travel Scout team.",
   });
@@ -40,7 +39,7 @@ const Guides = ({ fixedCategory }: { fixedCategory?: string }) => {
   const popular = guidesByTag("popular").slice(0, 5);
 
   return (
-    <Layout>
+    <Layout seo={seo}>
       <PageHero
         eyebrow={cat ? "Category" : "The journal"}
         title={cat ? cat.name : "Travel Guides"}
