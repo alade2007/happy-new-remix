@@ -1,1 +1,4 @@
 - All site content (destinations, guides, authors, categories, search) lives in src/data/scout.ts — pages read only from it so real content/images can be swapped in one place.
+- src/data/travelStore.ts is the async data-access layer (ids, coordinates, prices, testimonials, fetch* functions) over scout.ts — swap its internals for a CMS/DB query without touching pages.
+- Form submissions go through src/services/leads.ts with zod schemas in src/lib/leadSchemas.ts — one place for validation and the endpoint (VITE_API_ENDPOINT).
+- Per-route head tags use react-helmet-async via the <Seo> component, passed as Layout's `seo` prop; index.html holds only sitewide fallbacks.
