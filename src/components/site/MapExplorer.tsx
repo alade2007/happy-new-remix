@@ -2,12 +2,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { MapPin, ExternalLink, Star, Map as MapIcon, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Waypoint, WaypointCategory } from "@/data/waypoints";
+import TravelIcon from "./TravelIcon";
+import { Button } from "@/components/ui/button";
+import WaypointActions from "@/components/planner/WaypointActions";
 
 const filters: { key: "all" | WaypointCategory; label: string }[] = [
-  { key: "all", label: "📍 All Spots" },
-  { key: "stay", label: "🏨 Stays Near Here" },
-  { key: "tour", label: "🎟️ Tours & Entry" },
-  { key: "transit", label: "🚆 Transit Stops" },
+  { key: "all", label: "All Spots" },
+  { key: "stay", label: "Stays Near Here" },
+  { key: "tour", label: "Tours & Entry" },
+  { key: "transit", label: "Transit Stops" },
 ];
 
 export default function MapExplorer({ city, waypoints }: { city: string; waypoints: Waypoint[] }) {
@@ -53,10 +56,11 @@ export default function MapExplorer({ city, waypoints }: { city: string; waypoin
 
       <div className="sticky top-16 z-20 mb-6 flex gap-2 overflow-x-auto rounded-full border border-border bg-card/90 p-1.5 shadow-card backdrop-blur">
         {filters.map((f) => (
-          <button key={f.key} type="button" onClick={() => setFilter(f.key)}
-            className={cn("shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200", filter === f.key ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
+          <Button key={f.key} type="button" variant="ghost" onClick={() => setFilter(f.key)}
+            className={cn("group h-auto shrink-0 rounded-md px-3 py-1 text-sm font-medium transition-all duration-200 [&_svg]:size-5", filter === f.key ? "bg-travel-glow text-travel-brand" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
+            <TravelIcon kind={f.key === "all" ? "route" : f.key} />
             {f.label}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -72,28 +76,19 @@ export default function MapExplorer({ city, waypoints }: { city: string; waypoin
             const on = w.id === active;
             return (
               <article key={w.id} ref={(el) => (cardRefs.current[w.id] = el)} onClick={() => setActive(w.id)}
-                className={cn("cursor-pointer scroll-mt-36 rounded-2xl border bg-card p-4 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-card", on ? "border-accent ring-2 ring-accent/30 shadow-card" : "border-border")}>
+                className={cn("group cursor-pointer scroll-mt-36 rounded-lg border bg-card p-4 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-card", on ? "border-travel-brand ring-2 ring-travel-brand/20 shadow-card" : "border-border")}>
                 <div className="flex gap-4">
                   <img src={w.image} alt={w.title} loading="lazy" className="h-20 w-20 shrink-0 rounded-xl object-cover" />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-semibold leading-snug">{w.title}</h3>
+                      <h3 className="flex items-center gap-2 font-semibold leading-snug"><TravelIcon kind={w.category} />{w.title}</h3>
                       <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-accent/15 px-2 py-0.5 text-xs font-semibold text-accent">{w.rating.toFixed(1)} <Star className="h-3 w-3 fill-current" /></span>
                     </div>
                     <p className="text-xs text-muted-foreground">{w.address}</p>
                     <p className="mt-1.5 text-sm text-muted-foreground">{w.description}</p>
                   </div>
                 </div>
-                <div className="mt-4 flex items-center justify-between gap-3">
-                  <a href={w.directionsUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary">
-                    <MapPin className="h-4 w-4" /> Open Directions
-                  </a>
-                  <a href={w.affiliateUrl} target="_blank" rel="sponsored noopener noreferrer" onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow transition-all hover:brightness-110 active:scale-95">
-                    Book Guided Access <ExternalLink className="h-4 w-4" />
-                  </a>
-                </div>
+                <div className="mt-4"><WaypointActions waypoint={w} city={city} /></div>
               </article>
             );
           })}
