@@ -18,6 +18,7 @@ export default {
         display: ["'Fraunces'", "Georgia", "serif"],
       },
       colors: {
+        travel: { icon: "hsl(var(--travel-icon))", brand: "hsl(var(--travel-brand))", "brand-foreground": "hsl(var(--travel-brand-foreground))", glow: "hsl(var(--travel-glow))", map: "hsl(var(--travel-map))", water: "hsl(var(--travel-water))" },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
