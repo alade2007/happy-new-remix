@@ -2,3 +2,7 @@
 - src/data/travelStore.ts is the async data-access layer (ids, coordinates, prices, testimonials, fetch* functions) over scout.ts — swap its internals for a CMS/DB query without touching pages.
 - Form submissions go through src/services/leads.ts with zod schemas in src/lib/leadSchemas.ts — one place for validation and the endpoint (VITE_API_ENDPOINT).
 - Per-route head tags use react-helmet-async via the <Seo> component, passed as Layout's `seo` prop; index.html holds only sitewide fallbacks.
+- Category icon definitions live in src/lib/travelIcons.ts and render through TravelIcon so vector sizing and semantic hover tokens stay consistent across discovery, navigation and itinerary surfaces.
+- The planner is a session-only preview using AI Elements chat primitives and deterministic transformations of the existing destination data; never imply live AI, saved trips or billing until those services are connected.
+- Planner timeline and route preview share one itinerary and selection state so pin clicks and chat-driven destination changes cannot diverge.
+- External availability links resolve through src/lib/affiliateLinks.ts with HTTPS-only public partner templates and working non-affiliate fallbacks, so tracking configuration does not require editing views.
