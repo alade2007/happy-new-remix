@@ -9,6 +9,14 @@ import MapExplorer from "@/components/site/MapExplorer";
 import { waypointsFor } from "@/data/waypoints";
 import { coordsFor } from "@/data/travelStore";
 import { getDestination, guidesForDestination, destinations, sortedGuides } from "@/data/scout";
+import TravelIcon from "@/components/site/TravelIcon";
+import { Button } from "@/components/ui/button";
+
+const StayIcon = () => <TravelIcon kind="stay" />;
+const DiningIcon = () => <TravelIcon kind="dining" />;
+const TransitIcon = () => <TravelIcon kind="transit" />;
+const ActivityIcon = () => <TravelIcon kind="tour" />;
+const RouteIcon = () => <TravelIcon kind="route" />;
 
 const Block = ({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) => (
   <section className="border-t border-border py-8">
@@ -58,19 +66,19 @@ const DestinationPage = () => {
         <div className="lg:col-span-8">
           <p className="font-display text-xl leading-relaxed text-foreground md:text-2xl">{d.intro}</p>
 
-          <Block icon={MapPin} title="Popular attractions">
+          <Block icon={RouteIcon} title="Popular attractions">
             <ul className="grid gap-2 sm:grid-cols-2">
               {d.attractions.map((a) => <li key={a} className="flex gap-2 text-foreground/85"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />{a}</li>)}
             </ul>
           </Block>
-          <Block icon={Lightbulb} title="Things to do">
+          <Block icon={ActivityIcon} title="Things to do">
             <ol className="space-y-3">
               {d.thingsToDo.map((t, i) => (
                 <li key={t} className="flex gap-4"><span className="font-display text-xl text-accent">0{i + 1}</span><span className="pt-1 text-foreground/85">{t}</span></li>
               ))}
             </ol>
           </Block>
-          <Block icon={Utensils} title="Where to eat">
+          <Block icon={DiningIcon} title="Where to eat">
             <dl className="grid gap-4 sm:grid-cols-3">
               {d.eat.map((e) => (
                 <div key={e.name} className="rounded-lg bg-card p-5 shadow-card">
@@ -80,7 +88,7 @@ const DestinationPage = () => {
               ))}
             </dl>
           </Block>
-          <Block icon={BedDouble} title="Where to stay">
+          <Block icon={StayIcon} title="Where to stay">
             <dl className="divide-y divide-border">
               {d.stay.map((s) => (
                 <div key={s.name} className="flex flex-col gap-1 py-3 sm:flex-row sm:gap-6">
@@ -93,12 +101,13 @@ const DestinationPage = () => {
           <Block icon={Lightbulb} title="Travel tips">
             <ul className="space-y-2">{d.tips.map((t) => <li key={t} className="flex gap-2 text-foreground/85"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />{t}</li>)}</ul>
           </Block>
-          <Block icon={Bus} title="Getting around"><p className="leading-relaxed text-foreground/85">{d.gettingAround}</p></Block>
+          <Block icon={TransitIcon} title="Getting around"><p className="leading-relaxed text-foreground/85">{d.gettingAround}</p></Block>
           <Block icon={ShieldCheck} title="Safety & practical information"><p className="leading-relaxed text-foreground/85">{d.safety}</p></Block>
         </div>
 
         <aside className="lg:col-span-4">
           <div className="space-y-4 lg:sticky lg:top-24">
+            <Button variant="travel" asChild className="w-full"><Link to={`/planner?destination=${d.slug}`}><TravelIcon kind="route" className="text-travel-brand-foreground" />Plan my {d.name} trip</Link></Button>
             <div className="rounded-lg bg-primary p-6 text-primary-foreground">
               <h2 className="mb-5 text-2xl font-semibold">At a glance</h2>
               <dl className="space-y-5">

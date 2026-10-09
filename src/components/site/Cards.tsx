@@ -2,11 +2,14 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, Clock } from "lucide-react";
 import { type Destination, type Guide, getAuthor, formatDate, guidesForDestination, categorySlug } from "@/data/scout";
 import { cn } from "@/lib/utils";
+import TravelIcon from "./TravelIcon";
+import { editorialIcons } from "@/lib/travelIcons";
 
 export const DestinationCard = ({ d, size = "md" }: { d: Destination; size?: "md" | "lg" }) => {
   const count = guidesForDestination(d.slug).length;
   return (
     <Link to={`/destinations/${d.slug}`} className="group relative block overflow-hidden rounded-lg bg-muted">
+      <TravelIcon kind="route" className="absolute right-3 top-3 z-10 bg-card" />
       <div className={cn("overflow-hidden", size === "lg" ? "aspect-[4/5] md:aspect-[3/4]" : "aspect-[4/5]")}>
         <img src={d.image} alt={`${d.name}, ${d.country}`} loading="lazy" width={800} height={1000} className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105" />
       </div>
@@ -30,7 +33,7 @@ export const DestinationTile = ({ d }: { d: Destination }) => (
     <Link to={`/destinations/${d.slug}`} className="block overflow-hidden rounded-lg" tabIndex={-1} aria-hidden>
       <img src={d.image} alt="" loading="lazy" width={800} height={560} className="aspect-[7/5] w-full object-cover transition duration-700 group-hover:scale-105" />
     </Link>
-    <p className="eyebrow mt-4">{d.region}</p>
+    <p className="eyebrow mt-4 flex items-center gap-2"><TravelIcon kind="route" />{d.region}</p>
     <h3 className="mt-1 text-2xl font-semibold">
       <Link to={`/destinations/${d.slug}`} className="transition hover:text-accent">{d.name}, <span className="text-muted-foreground">{d.country}</span></Link>
     </h3>
@@ -54,7 +57,7 @@ const Meta = ({ g, className }: { g: Guide; className?: string }) => (
 export const GuideCard = ({ g, variant = "default" }: { g: Guide; variant?: "default" | "horizontal" | "compact" | "feature" }) => {
   const href = `/guides/${g.slug}`;
   const cat = (
-    <Link to={`/guides?category=${categorySlug(g.category)}`} className="eyebrow hover:underline">{g.category}</Link>
+    <Link to={`/guides?category=${categorySlug(g.category)}`} className="group eyebrow inline-flex items-center gap-2 hover:underline"><TravelIcon icon={editorialIcons[categorySlug(g.category) as keyof typeof editorialIcons]} />{g.category}</Link>
   );
 
   if (variant === "feature") {
@@ -116,6 +119,7 @@ export const CategoryCard = ({ name, slug, description, active }: { name: string
       active ? "border-accent bg-accent/5" : "border-border bg-card",
     )}
   >
+    <TravelIcon icon={editorialIcons[slug as keyof typeof editorialIcons]} className="mb-3" />
     <span className="font-display text-xl font-semibold">{name}</span>
     {description && <span className="mt-2 text-sm text-muted-foreground">{description}</span>}
     <ArrowUpRight className="mt-4 h-4 w-4 text-accent transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
