@@ -13,7 +13,7 @@ export function createItinerary(destination: Destination, days = 3): ItineraryDa
   ];
   const stops: Waypoint[] = known.length ? known : entries.map((entry, i) => ({
     ...entry, id: `${destination.slug}-${i}`, address: `${destination.name}, ${destination.country}`, rating: 0, image: destination.image,
-    coordinates: geo, pin: { x: 18 + (i % 3) * 28, y: 23 + Math.floor(i / 3) * 30 },
+    coordinates: { lat: geo.lat + ((i % 3) - 1) * 0.012, lng: geo.lng + (Math.floor(i / 3) - 0.5) * 0.016 }, pin: { x: 18 + (i % 3) * 28, y: 23 + Math.floor(i / 3) * 30 },
     directionsUrl: `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${entry.title}, ${destination.name}, ${destination.country}`)}`, affiliateUrl: "#",
   }));
   const count = Math.min(Math.max(days, 1), 7);
