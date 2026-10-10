@@ -36,7 +36,7 @@ export async function loadTrip(id: string, city: string, image: string, dayCount
   if (error) throw error;
   const days: ItineraryDay[] = Array.from({ length: Math.max(dayCount, ...data.map(r => r.day_number), 1) }, (_, i) => ({ id: `day-${i + 1}`, title: `Day ${i + 1}`, stops: [] }));
   for (const r of data) {
-    const stop: Waypoint = { id: r.id, title: r.title, address: city, description: "", rating: 0, image, category: r.type as WaypointCategory, coordinates: { lat: r.lat, lng: r.lng }, pin: { x: 50, y: 50 }, directionsUrl: directionsUrl({ lat: r.lat, lng: r.lng }), affiliateUrl: r.affiliate_url ?? "#", affiliate: r.affiliate_url ? { url: r.affiliate_url } : undefined };
+    const stop: Waypoint = { id: r.id, title: r.title, address: city, description: "", rating: 0, image, category: r.type as WaypointCategory, coordinates: { lat: r.lat, lng: r.lng }, pin: { x: 50, y: 50 }, directionsUrl: directionsUrl(r.lat, r.lng), affiliateUrl: r.affiliate_url ?? "#", affiliate: r.affiliate_url ? { url: r.affiliate_url } : undefined };
     days[r.day_number - 1].stops.push(stop);
   }
   return { days, tier: (data[0]?.cost_tier as SpendingTier) ?? "balanced" };
