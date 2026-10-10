@@ -5,6 +5,6 @@
 - [x] Verify planner interactions, links, and preview health.
 
 # Contextual planner enhancements
-- [ ] Add structured spending-tier and affiliate data with safe link resolution.
-- [ ] Add contextual stop drawer, tier controls, and vector hover treatments.
-- [ ] Verify tier changes, drawer interactions, and preview health.
+- [x] Add structured spending-tier and affiliate data with safe link resolution.
+- [x] Add contextual stop drawer, tier controls, and vector hover treatments.
+- [x] Verify tier changes, drawer interactions, and preview health.
