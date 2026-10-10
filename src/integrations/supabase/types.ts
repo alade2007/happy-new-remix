@@ -14,13 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      itineraries: {
+        Row: {
+          created_at: string
+          destination: string
+          id: string
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          destination: string
+          id?: string
+          status?: string
+          title: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          destination?: string
+          id?: string
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      waypoint_items: {
+        Row: {
+          affiliate_url: string | null
+          cost_tier: string
+          day_number: number
+          id: string
+          itinerary_id: string
+          lat: number
+          lng: number
+          position_index: number
+          title: string
+          type: string
+        }
+        Insert: {
+          affiliate_url?: string | null
+          cost_tier?: string
+          day_number: number
+          id?: string
+          itinerary_id: string
+          lat: number
+          lng: number
+          position_index: number
+          title: string
+          type: string
+        }
+        Update: {
+          affiliate_url?: string | null
+          cost_tier?: string
+          day_number?: number
+          id?: string
+          itinerary_id?: string
+          lat?: number
+          lng?: number
+          position_index?: number
+          title?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waypoint_items_itinerary_id_fkey"
+            columns: ["itinerary_id"]
+            isOneToOne: false
+            referencedRelation: "itineraries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      owns_itinerary: { Args: { _itinerary: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
