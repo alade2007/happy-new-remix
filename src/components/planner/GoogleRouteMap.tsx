@@ -1,3 +1,4 @@
+/// <reference types="google.maps" />
 import { useEffect, useRef, useState } from "react";
 import type { ItineraryDay } from "@/data/planner";
 
@@ -6,7 +7,7 @@ const CHANNEL = import.meta.env["VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
 let loader: Promise<void> | null = null;
 
 function loadMaps(): Promise<void> {
-  if (window.google?.maps?.Map) return Promise.resolve();
+  if (typeof google !== "undefined" && google.maps?.Map) return Promise.resolve();
   if (loader) return loader;
   loader = new Promise((resolve, reject) => {
     if (!KEY) return reject(new Error("Map key missing"));
