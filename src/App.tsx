@@ -7,6 +7,8 @@ import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
 import ErrorBoundary from "./components/ErrorBoundary";
 import PageSkeleton from "./components/PageSkeleton";
+import RequireAuth from "./components/auth/RequireAuth";
+import { AuthProvider } from "./hooks/useAuth";
 
 const Destinations = lazy(() => import("./pages/Destinations"));
 const DestinationPage = lazy(() => import("./pages/DestinationPage"));
@@ -50,6 +52,7 @@ const App = () => (
         </ErrorBoundary>
       </BrowserRouter>
     </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
