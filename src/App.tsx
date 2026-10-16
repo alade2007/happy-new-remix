@@ -7,6 +7,8 @@ import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
 import ErrorBoundary from "./components/ErrorBoundary";
 import PageSkeleton from "./components/PageSkeleton";
+import RequireAuth from "./components/auth/RequireAuth";
+import { AuthProvider } from "./hooks/useAuth";
 
 const Destinations = lazy(() => import("./pages/Destinations"));
 const DestinationPage = lazy(() => import("./pages/DestinationPage"));
@@ -16,6 +18,7 @@ const About = lazy(() => import("./pages/About"));
 const SearchPage = lazy(() => import("./pages/SearchPage"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Planner = lazy(() => import("./pages/Planner"));
+const Auth = lazy(() => import("./pages/Auth"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -23,6 +26,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <AuthProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -39,7 +43,8 @@ const App = () => (
             <Route path="/food-culture" element={<Guides key="food" fixedCategory="food-culture" />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/planner" element={<Planner />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/planner" element={<RequireAuth><Planner /></RequireAuth>} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -47,6 +52,7 @@ const App = () => (
         </ErrorBoundary>
       </BrowserRouter>
     </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
