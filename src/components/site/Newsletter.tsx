@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Check, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -7,7 +8,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 /** Newsletter form with validation, loading and success states. */
 export const NewsletterForm = ({ dark, id }: { dark?: boolean; id?: string }) => {
   const [email, setEmail] = useState("");
-  const [state, setState] = useState<"idle" | "loading" | "done">("idle");
+  const [state, setState] = useState<"idle" | "loading">("idle");
   const [error, setError] = useState("");
 
   const submit = (e: React.FormEvent) => {
@@ -18,17 +19,14 @@ export const NewsletterForm = ({ dark, id }: { dark?: boolean; id?: string }) =>
     }
     setError("");
     setState("loading");
-    setTimeout(() => setState("done"), 700);
+    window.setTimeout(() => {
+      setState("idle");
+      setEmail("");
+      toast.success("You're on the list!", {
+        description: "Look out for our next issue in your inbox.",
+      });
+    }, 700);
   };
-
-  if (state === "done") {
-    return (
-      <p role="status" className={cn("flex items-center gap-2 text-sm font-medium", dark ? "text-primary-foreground" : "text-foreground")}>
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent text-accent-foreground"><Check className="h-3.5 w-3.5" /></span>
-        You're on the list. Look out for our next issue.
-      </p>
-    );
-  }
 
   return (
     <form onSubmit={submit} noValidate className="w-full">
