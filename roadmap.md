@@ -14,4 +14,4 @@
 - [x] Drag to reorder stops + sync-error fallback card
 - [x] Save / My trips
 - [x] .env.example cleanup
-- [ ] Reorder tests + browser check
+- [x] Reorder tests + browser check
