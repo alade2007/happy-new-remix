@@ -3,6 +3,7 @@ import { availabilityUrl, directionsUrl, waypointBookingUrl } from "@/lib/affili
 import { waypointsFor, waypointTierDetails } from "@/data/waypoints";
 import { travelIcons } from "@/lib/travelIcons";
 import { createItinerary, interpretPlannerRequest } from "@/data/planner";
+import { moveStop } from "@/lib/reorder";
 import { destinations } from "@/data/scout";
 
 describe("Travel feature mapping", () => {
@@ -50,5 +51,27 @@ describe("Planner actions", () => {
     const result = interpretPlannerRequest("Plan 4 days in Paris", destinations[0], destinations, 3);
     expect(result.destination.slug).toBe("paris");
     expect(result.days).toBe(4);
+  });
+});
+describe("Stop reordering", () => {
+  const lagos = destinations.find(d => d.slug === "lagos");
+  if (!lagos) throw new Error("Lagos content missing");
+  const days = createItinerary(lagos, 3);
+  it("moves a stop onto another stop's slot within the same day", () => {
+    const day = days[0];
+    if (day.stops.length < 2) throw new Error("Need two stops in day 1");
+    const [first, second] = day.stops;
+    const next = moveStop(days, first.id, second.id);
+    expect(next[0].stops.map(s => s.id)).toEqual([second.id, first.id, ...day.stops.slice(2).map(s => s.id)]);
+  });
+  it("moves a stop to the end of another day", () => {
+    const first = days[0].stops[0];
+    const next = moveStop(days, first.id, days[2].id);
+    expect(next[0].stops.some(s => s.id === first.id)).toBe(false);
+    expect(next[2].stops.at(-1)?.id).toBe(first.id);
+  });
+  it("throws on unknown ids so the canvas boundary can recover", () => {
+    expect(() => moveStop(days, "missing-stop", days[0].id)).toThrow("Unknown stop");
+    expect(() => moveStop(days, days[0].stops[0].id, "missing-day")).toThrow("Unknown drop target");
   });
 });

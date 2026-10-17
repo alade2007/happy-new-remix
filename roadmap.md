@@ -9,9 +9,9 @@
 - [x] Add contextual stop drawer, tier controls, and vector hover treatments.
 - [x] Verify tier changes, drawer interactions, and preview health.
 # Production upgrade
-- [ ] Sign-in page + Trip Planner sign-in guard
-- [ ] Real Google route map (centered, numbered pins, polyline)
-- [ ] Drag to reorder stops + sync-error fallback card
-- [ ] Save / My trips
-- [ ] .env.example cleanup
+- [x] Sign-in page + Trip Planner sign-in guard
+- [x] Real Google route map (centered, numbered pins, polyline)
+- [x] Drag to reorder stops + sync-error fallback card
+- [x] Save / My trips
+- [x] .env.example cleanup
 - [ ] Reorder tests + browser check
